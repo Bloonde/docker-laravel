@@ -36,7 +36,7 @@ Edited .env project laravel:
 Start bash container project laravel
 
     $ docker ps
-    $ docker exec -t docker_name_project_1 bash //docker_name_project_1 for name command docker ps
+    $ docker exec -it docker_name_project_1 bash //docker_name_project_1 for name command docker ps
     $ project // cd /var/www/html/project
     
     Commands: composer, artisan, git, etc...
