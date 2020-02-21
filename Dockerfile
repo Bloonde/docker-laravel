@@ -29,6 +29,10 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 
 ADD entrypoint.sh /root/entrypoint.sh
 RUN chmod 777 /root/entrypoint.sh
+RUN echo 'alias project="cd /var/www/html/project"' >> ~/.bashrc
+RUN echo 'alias "apache"="/etc/init.d/apache2"' >> ~/.bashrc
+RUN echo 'alias "cda"="composer dumpautoload"' >> ~/.bashrc
+RUN echo 'alias "lclear"="php artisan config:clear && php artisan cache:clear && php artisan view:clear"' >> ~/.bashrc
 ENTRYPOINT /root/entrypoint.sh
 
 EXPOSE 80

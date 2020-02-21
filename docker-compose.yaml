@@ -2,6 +2,8 @@ version: "3"
 services:
   database:
     image: mysql:5.7
+    container_name: mysql
+    command: mysqld --innodb-buffer-pool-size=64M
     volumes:
       - dbdata:/var/lib/mysql
     environment:
@@ -11,13 +13,11 @@ services:
       - "MYSQL_ROOT_PASSWORD=secret"
     ports:
         - "3306:3306"
-    networks:
-      - webnet
-  name_project:
+  project:
     # replace username/repo:tag with your name and image details
     image: laravel
+    container_name: name_project
     deploy:
-      replicas: 1
       #restart_policy:
         #condition: on-failure
       resources:
@@ -26,12 +26,13 @@ services:
           memory: 2048M
     volumes:
       - "../:/var/www/html/project"
+      - "../docker-laravel/php.ini:/etc/php/7.1/apache2/php.ini"
     ports:
       - "80:80"
       - "2222:22"
-    networks:
-      - webnet
+    links:
+      - "database:mysql"
 volumes:
   dbdata:
 networks:
-  webnet:
+  default:
