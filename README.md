@@ -19,7 +19,7 @@ Start:
 Edited .env project laravel:
 
 - "DB_CONNECTION=mysql" //not edited
-- "DB_HOST=mysqk" //not edited
+- "DB_HOST=mysql" //not edited
 - "DB_PORT=3306" //not edited
 - "DB_DATABASE=homestead" //MYSQL_DATABASE docker-compose.yml
 - "DB_USERNAME=root" //MYSQL_USER docker-compose.yml
