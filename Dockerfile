@@ -16,6 +16,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 #restart apache server and enable url rewrite mode
 RUN service apache2 stop && a2enmod rewrite
 
+ARG PROJECT_NAME
 
 #add virtual host configuration of the site
 ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
@@ -29,7 +30,7 @@ ENV APACHE_LOCK_DIR /var/lock/apache2
 
 ADD entrypoint.sh /root/entrypoint.sh
 RUN chmod 777 /root/entrypoint.sh
-RUN echo 'alias project="cd /var/www/html/project"' >> ~/.bashrc
+RUN echo 'alias project="cd /var/www/html"' >> ~/.bashrc
 RUN echo 'alias "apache"="/etc/init.d/apache2"' >> ~/.bashrc
 RUN echo 'alias "cda"="composer dumpautoload"' >> ~/.bashrc
 RUN echo 'alias "lclear"="php artisan config:clear && php artisan cache:clear && php artisan view:clear"' >> ~/.bashrc

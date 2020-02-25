@@ -15,8 +15,8 @@ services:
         - "3306:3306"
   project:
     # replace username/repo:tag with your name and image details
-    image: laravel
-    container_name: name_project
+    image: ${IMAGE_NAME}
+    container_name: ${PROJECT_NAME}
     deploy:
       #restart_policy:
         #condition: on-failure
@@ -25,8 +25,9 @@ services:
           cpus: "0.5"
           memory: 2048M
     volumes:
-      - "../:/var/www/html/project"
+      - "../:/var/www/html/${PROJECT_NAME}"
       - "../docker-laravel/php.ini:/etc/php/7.1/apache2/php.ini"
+      - "../docker-laravel/000-default.conf:/etc/apache2/sites-available/000-default.conf"
     ports:
       - "80:80"
       - "2222:22"
