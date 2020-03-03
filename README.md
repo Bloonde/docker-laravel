@@ -1,46 +1,23 @@
 # Docker Laravel
 
-Create image:
+Create .env
 
-    $ docker build -t laravel .
+    $ cp .env.example .env
 
-Edited docker-compose.yml (optional except MYSQL_DATABASE and name_project)
+Edit .env
 
-- "MYSQL_DATABASE=homestead" //database mysql
-- "MYSQL_USER=homestead" //user mysql
-- "MYSQL_PASSWORD=secret" //password mysql
-- "MYSQL_ROOT_PASSWORD=secret" //password root mysql
-- "name_project:" //Name project
+    -PROJECT_NAME=project_name
+    -IMAGE_NAME=php // not edited
+    -TAG_IMAGE=7.1 // 7.1 / 7.2 / 7.3
 
 Start:
 
-    $ docker-compose up
+    $ ./start.sh
     
-Edited .env project laravel:
+Run container
 
-- "DB_CONNECTION=mysql" //not edited
-- "DB_HOST=mysql" //not edited
-- "DB_PORT=3306" //not edited
-- "DB_DATABASE=homestead" //MYSQL_DATABASE docker-compose.yml
-- "DB_USERNAME=root" //MYSQL_USER docker-compose.yml
-- "DB_PASSWORD=secret" //MYSQL_PASSWORD docker-compose.yml
-
-Start bash container project laravel
-
-    $ docker ps
-    $ docker exec -it name_project bash //name_project for name command docker ps
-    $ project // cd /var/www/html/project
-    
-    Commands: composer, artisan, git, etc...
-  
-After edited docker-compose.yml (after execute docker-compose up)
-
-    $ docker-compose down
-    $ docker-compose up
-    
-After edited php.ini
-
-    $ apache reload
+    $ docker exec -it project_name bash
+    $ su docker
     
 Alias
 

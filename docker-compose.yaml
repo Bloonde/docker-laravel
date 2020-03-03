@@ -7,7 +7,7 @@ services:
     volumes:
       - dbdata:/var/lib/mysql
     environment:
-      - "MYSQL_DATABASE=homestead"
+      - "MYSQL_DATABASE=laravel"
       - "MYSQL_USER=homestead"
       - "MYSQL_PASSWORD=secret"
       - "MYSQL_ROOT_PASSWORD=secret"
@@ -15,7 +15,7 @@ services:
         - "3306:3306"
   project:
     # replace username/repo:tag with your name and image details
-    image: ${IMAGE_NAME}
+    image: ${IMAGE_NAME}:${TAG_IMAGE}
     container_name: ${PROJECT_NAME}
     deploy:
       #restart_policy:
@@ -26,13 +26,14 @@ services:
           memory: 2048M
     volumes:
       - "../:/var/www/html/${PROJECT_NAME}"
-      - "../docker-laravel/php.ini:/etc/php/7.1/apache2/php.ini"
-      - "../docker-laravel/000-default.conf:/etc/apache2/sites-available/000-default.conf"
+      - "../docker-laravel/php/${TAG_IMAGE}/php.ini:/etc/php/${TAG_IMAGE}/apache2/php.ini"
+      - "../docker-laravel/php/${TAG_IMAGE}/000-default.conf:/etc/apache2/sites-available/000-default.conf"
     ports:
       - "80:80"
       - "2222:22"
     links:
       - "database:mysql"
+    command: bash -c "chgrp -R www-data /var/www/html/${PROJECT_NAME}/storage && chgrp -R www-data /var/www/html/${PROJECT_NAME}/bootstrap/cache && chmod -R 777 /var/www/html/${PROJECT_NAME}/storage"
 volumes:
   dbdata:
 networks:
