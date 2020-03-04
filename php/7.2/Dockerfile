@@ -5,7 +5,7 @@ RUN apt-get install -y software-properties-common
 RUN apt-get install -y language-pack-en-base
 RUN LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
 RUN apt-get update
-RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y apache2 php7.2 libapache2-mod-php7.2 php7.0-cli php7.2-common php7.2-mbstring php7.2-intl php7.2-xml php7.2-mysql php7.1-mcrypt curl php7.2-curl zip unzip php-zip wget git nano p7zip-full php-imagick
+RUN export DEBIAN_FRONTEND=noninteractive && apt-get install -y apache2 php7.2 libapache2-mod-php7.2 php7.0-cli php7.2-common php7.2-mbstring php7.2-intl php7.2-xml php7.2-mysql php7.1-mcrypt curl php7.2-curl zip unzip php-zip wget git nano p7zip-full php-imagick php7.2-gd php7.2-zip
 
 #Install NodeJS
 RUN apt-get install -y nodejs npm
