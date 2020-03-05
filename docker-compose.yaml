@@ -27,12 +27,12 @@ services:
     volumes:
       - "../:/var/www/html/${PROJECT_NAME}"
       - "../docker-laravel/php/${TAG_IMAGE}/000-default.conf:/etc/apache2/sites-available/000-default.conf"
+      - "../docker-laravel/.env:/root/.env"
     ports:
       - "80:80"
       - "2222:22"
     links:
       - "database:mysql"
-    command: bash -c "chgrp -R www-data /var/www/html/${PROJECT_NAME}/storage && chgrp -R www-data /var/www/html/${PROJECT_NAME}/bootstrap/cache && chmod -R 777 /var/www/html/${PROJECT_NAME}/storage && chmod -R 777 /var/www/html/${PROJECT_NAME}/bootstrap"
 volumes:
   dbdata:
 networks:

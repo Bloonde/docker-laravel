@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 
 RUN apt-get update
 RUN apt-get install -y software-properties-common
@@ -22,8 +22,8 @@ ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
 RUN useradd -rm -d /home/docker -s /bin/bash -g root -G sudo -u 1000 docker
 ADD entrypoint.sh /root/entrypoint.sh
 RUN chmod 777 /root/entrypoint.sh
-RUN echo 'alias project="cd /var/www/html"' >> /home/docker/.bashrc
 RUN echo 'alias "apache"="/etc/init.d/apache2"' >> /home/docker/.bashrc
+RUN echo 'alias "cu"="composer update"' >> /home/docker/.bashrc
 RUN echo 'alias "cda"="composer dumpautoload"' >> /home/docker/.bashrc
 RUN echo 'alias "lclear"="php artisan config:clear && php artisan cache:clear && php artisan view:clear"' >> /home/docker/.bashrc
 ENTRYPOINT /root/entrypoint.sh
