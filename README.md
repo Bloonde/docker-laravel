@@ -2,7 +2,7 @@
 
 Create .env
 
-    $ cd docer-laravel
+    $ cd docker-laravel
     $ cp .env.example .env
 
 Edit .env (Docker-Laravel)
