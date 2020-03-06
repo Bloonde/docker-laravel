@@ -20,7 +20,7 @@ RUN service apache2 stop && a2enmod rewrite
 ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
 
 RUN useradd -rm -d /home/docker -s /bin/bash -g root -G sudo -u 1000 docker
-ADD entrypoint.sh /root/entrypoint.sh
+COPY entrypoint.sh /root/entrypoint.sh
 RUN chmod 777 /root/entrypoint.sh
 RUN echo 'alias "apache"="/etc/init.d/apache2"' >> /home/docker/.bashrc
 RUN echo 'alias "cu"="composer update"' >> /home/docker/.bashrc
