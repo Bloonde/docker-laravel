@@ -8,4 +8,4 @@ if [[ "$(docker images -q php:$PHP 2>/dev/null)" == "" ]]; then
   cd ../
 fi
 
-docker-compose up
+docker-compose up -d
