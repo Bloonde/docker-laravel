@@ -406,6 +406,7 @@ case "$1" in
 		esac
 	;;
   *)
+    clear
     echo ""
     echo " manga laravel project -------------------- Descargar Laravel"
     echo " manga laravel docker --------------------- Descargar Laravel-Docker"
@@ -419,6 +420,7 @@ case "$1" in
     echo " manga minimize --------------------------- Minimizar hacienco click en dock"
     echo " manga drive [install/start/stop/restart] - Instalar/Montar/Desmontar/Reiniciar GoogleDrive"
     echo " manga ssh bloonde ------------------------ Iniciar conexión ssh con bloonde"
+    echo " manga ssh bloonde mysql ------------------ Iniciar conexión ssh con bloonde con puente mysql (3306)"
     echo " manga menu ------------------------------- Menú del Script"
     echo ""
     read -p " Pulse [enter] para salir "
