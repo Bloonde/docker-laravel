@@ -59,6 +59,7 @@ function downloadLaravelProject(){
 	clear
 	read -p " Escriba el nombre del proyecto: " NAME_PROJECT
 	read -p " Escriba la versión del proyecto [7.* / 6.* / 5.8.* / etc...]: " VERSION_PROJECT
+    echo -e "\e[33m Warning --> Clonando Laravel... \e[39m"
 	composer create-project --prefer-dist laravel/laravel "$NAME_PROJECT" "$VERSION_PROJECT"
 	cd "$NAME_PROJECT"
 	gedit .env
@@ -67,11 +68,15 @@ function downloadLaravelProject(){
 
 function downloadLaravelDocker(){
   clear
+  echo -e "\e[33m Warning --> Clonando Docker... \e[39m"
   git clone https://github.com/Bloonde/docker-laravel.git
   cd docker-laravel
+  echo -e "\e[33m Warning --> Borrando .git... \e[39m"
   sudo rm -r .git
+  echo -e "\e[33m Warning --> Creando .env... \e[39m"
   cp .env.example .env
   gedit .env
+  echo -e "\e[33m Warning --> Iniciando docker... \e[39m"
   ./start.sh
 }
 
@@ -97,13 +102,13 @@ function downloadLaravelVue(){
 
 function install(){
   clear
-  echo " Instalando composer"
+  echo -e "\e[33m Warning --> Instalando composer... \e[39m"
   installComposer
   clear
-  echo " Instalando docker"
+  echo -e "\e[33m Warning --> Instalando docker... \e[39m"
   installDocker
   clear
-  echo " Todo instalado"
+  echo -e "\e[94m Ok --> Todo instalado \e[39m"
   read -p " Pulse [enter] para reiniciar (RECOMENDADO) o [ctrl + c] para no reiniciar"
   reboot
 }
@@ -156,72 +161,176 @@ function minimize(){
 
 # shellcheck disable=SC2120
 function laravelAbstract(){
+    clear
+    if [ -f "$FILE" ]
+    then
+        echo -e "\e[33m Warning --> Borrando app/User.php... \e[39m"
+        sudo rm -r app/User.php
+    fi
+    sudo rm -r database/migrations
+    echo -e "\e[33m Warning --> Borrando database/migrations... \e[39m"
+    mkdir database/migrations
+    echo -e "\e[33m Warning --> Creando database/migrations... \e[39m"
     AUX="0"
 	  if ! sudo cat composer.json | grep '"bloondeweb/LaravelAbstractClass": "master"' >> /dev/null
 	  then
-	    COMPOSER=$(sed "$(($(cat composer.json | grep -n '"require": {' | cut -d ':' -f 1) + 1)) i \"bloondeweb/LaravelAbstractClass\": \"master\"," composer.json)
+	    COMPOSER=$(sed "$(($(cat composer.json | grep -n '"require": {' | cut -d ':' -f 1) + 1)) i         \"bloondeweb/LaravelAbstractClass\": \"master\"," composer.json)
+	    echo -e "\e[33m Warning --> Añadiendo a composer.json... \e[39m"
 	    echo "$COMPOSER" > composer.json
 	  fi
 	  if ! sudo cat composer.json | grep '"repositories": \[' >> /dev/null
 	  then
 	    AUX="1"
-	    REPOSITORIES=$(sed "$(($(cat composer.json | grep -n '"require-dev": {' | cut -d ':' -f 1))) i \"repositories\": [\n ]," composer.json)
+	    REPOSITORIES=$(sed "$(($(cat composer.json | grep -n '"require-dev": {' | cut -d ':' -f 1))) i     \"repositories\": [\n ]," composer.json)
+	    echo -e "\e[33m Warning --> Añadiendo a composer.json... \e[39m"
 	    echo "$REPOSITORIES" > composer.json
 	  fi
 	  if ! sudo cat composer.json | grep '"url": "https://github.com:/bloondeweb/LaravelAbstractClass.git"' >> /dev/null
 	  then
 	    if [ $AUX = "1" ]
 	    then
-	      REPO=$(sed "$(($(cat composer.json | grep -n '"repositories": \[' | cut -d ':' -f 1) + 1)) i {\n  \"type\": \"vcs\",\n  \"url\": \"https://github.com:/bloondeweb/LaravelAbstractClass.git\"\n }"  composer.json)
+	      REPO=$(sed "$(($(cat composer.json | grep -n '"repositories": \[' | cut -d ':' -f 1) + 1)) i         {\n              \"type\": \"vcs\",\n              \"url\": \"https://github.com:/bloondeweb/LaravelAbstractClass.git\"\n         }"  composer.json)
       else
-	      REPO=$(sed "$(($(cat composer.json | grep -n '"repositories": \[' | cut -d ':' -f 1) + 1)) i {\n  \"type\": \"vcs\",\n  \"url\": \"https://github.com:/bloondeweb/LaravelAbstractClass.git\"\n },"  composer.json)
+	      REPO=$(sed "$(($(cat composer.json | grep -n '"repositories": \[' | cut -d ':' -f 1) + 1)) i         {\n              \"type\": \"vcs\",\n              \"url\": \"https://github.com:/bloondeweb/LaravelAbstractClass.git\"\n         },"  composer.json)
       fi
+	    echo -e "\e[33m Warning --> Añadiendo a composer.json... \e[39m"
 	    echo "$REPO" > composer.json
 	  fi
+	  echo -e "\e[33m Warning --> Actualizando composer... \e[39m"
 	  composer update
 	  if ! sudo cat composer.json | grep '"Bloonde\\\\ProjectGenerator\\\\\": "vendor/bloondeweb/LaravelAbstractClass/src"' >> /dev/null
 	  then
-	    PSR4=$(sed "$(($(cat composer.json | grep -n '"autoload": {' | cut -d ':' -f 1) + 2)) i \"Bloonde\\\\\\\\ProjectGenerator\\\\\\\\\": \"vendor/bloondeweb/LaravelAbstractClass/src\"," composer.json)
+	    PSR4=$(sed "$(($(cat composer.json | grep -n '"autoload": {' | cut -d ':' -f 1) + 2)) i             \"Bloonde\\\\\\\\ProjectGenerator\\\\\\\\\": \"vendor/bloondeweb/LaravelAbstractClass/src\"," composer.json)
+	    echo -e "\e[33m Warning --> Añadiendo a composer.json... \e[39m"
 	    echo "$PSR4" > composer.json
 	  fi
 	  if ! sudo cat config/app.php | grep 'Bloonde\\ProjectGenerator\\LaravelAbstractClassServiceProvider::class' >> /dev/null
 	  then
-	    APP=$(sed "$(($(cat config/app.php | grep -n "providers' => \[" | cut -d ':' -f 1) + 1)) i Bloonde\\\\ProjectGenerator\\\\LaravelAbstractClassServiceProvider::class," config/app.php)
+	    APP=$(sed "$(($(cat config/app.php | grep -n "providers' => \[" | cut -d ':' -f 1) + 1)) i         Bloonde\\\\ProjectGenerator\\\\LaravelAbstractClassServiceProvider::class," config/app.php)
+	    echo -e "\e[33m Warning --> Añadiendo a config/app.php... \e[39m"
 	    echo "$APP" > config/app.php
 	  fi
+	  echo -e "\e[33m Warning --> Actualizando librerias... \e[39m"
 	  composer dumpautoload
+	  echo -e "\e[33m Warning --> Limpiando laravel... \e[39m"
 	  php artisan config:clear && php artisan cache:clear
+	  echo -e "\e[94m Ok --> Terminado \e[39m"
 }
 
 function userAndPrivilegies(){
+    FILE=app/Autoload.php
+    if [ -f "$FILE" ]
+    then
     AUX="0"
 	  if ! sudo cat composer.json | grep '"tymon/jwt-auth": "^0.5.12"' >> /dev/null
 	  then
-	    COMPOSER=$(sed "$(($(cat composer.json | grep -n '"require": {' | cut -d ':' -f 1) + 1)) i \"tymon/jwt-auth\": \"^0.5.12\"," composer.json)
+	    COMPOSER=$(sed "$(($(cat composer.json | grep -n '"require": {' | cut -d ':' -f 1) + 1)) i         \"tymon/jwt-auth\": \"^0.5.12\"," composer.json)
 	    echo "$COMPOSER" > composer.json
 	  fi
 	  if ! sudo cat composer.json | grep '"bloondeweb/usersandprivileges": "master"' >> /dev/null
 	  then
-	    COMPOSER=$(sed "$(($(cat composer.json | grep -n '"require": {' | cut -d ':' -f 1) + 1)) i \"bloondeweb/usersandprivileges\": \"master\"," composer.json)
+	    COMPOSER=$(sed "$(($(cat composer.json | grep -n '"require": {' | cut -d ':' -f 1) + 1)) i         \"bloondeweb/usersandprivileges\": \"master\"," composer.json)
 	    echo "$COMPOSER" > composer.json
 	  fi
 	  if ! sudo cat composer.json | grep '"repositories": \[' >> /dev/null
 	  then
 	    AUX="1"
-	    REPOSITORIES=$(sed "$(($(cat composer.json | grep -n '"require-dev": {' | cut -d ':' -f 1))) i \"repositories\": [\n ]," composer.json)
+	    REPOSITORIES=$(sed "$(($(cat composer.json | grep -n '"require-dev": {' | cut -d ':' -f 1))) i     \"repositories\": [\n ]," composer.json)
 	    echo "$REPOSITORIES" > composer.json
 	  fi
 	  if ! sudo cat composer.json | grep '"url": "https://github.com:/bloondeweb/usersandprivileges.git"' >> /dev/null
 	  then
 	    if [ $AUX = "1" ]
 	    then
-	      REPO=$(sed "$(($(cat composer.json | grep -n '"repositories": \[' | cut -d ':' -f 1) + 1)) i {\n  \"type\": \"vcs\",\n  \"url\": \"https://github.com:/bloondeweb/usersandprivileges.git\"\n }"  composer.json)
+	      REPO=$(sed "$(($(cat composer.json | grep -n '"repositories": \[' | cut -d ':' -f 1) + 1)) i         {\n              \"type\": \"vcs\",\n              \"url\": \"https://github.com:/bloondeweb/usersandprivileges.git\"\n         }"  composer.json)
       else
-	      REPO=$(sed "$(($(cat composer.json | grep -n '"repositories": \[' | cut -d ':' -f 1) + 1)) i {\n  \"type\": \"vcs\",\n  \"url\": \"https://github.com:/bloondeweb/usersandprivileges.git\"\n },"  composer.json)
+	      REPO=$(sed "$(($(cat composer.json | grep -n '"repositories": \[' | cut -d ':' -f 1) + 1)) i         {\n              \"type\": \"vcs\",\n              \"url\": \"https://github.com:/bloondeweb/usersandprivileges.git\"\n         },"  composer.json)
       fi
 	    echo "$REPO" > composer.json
 	  fi
 	  composer update
+	  if ! sudo cat composer.json | grep '"Bloonde\\\\UsersAndPrivileges\\\\\": "vendor/bloondeweb/usersandprivileges/src"' >> /dev/null
+	  then
+	    PSR4=$(sed "$(($(cat composer.json | grep -n '"autoload": {' | cut -d ':' -f 1) + 2)) i             \"Bloonde\\\\\\\\UsersAndPrivileges\\\\\\\\\": \"vendor/bloondeweb/usersandprivileges/src\"," composer.json)
+	    echo "$PSR4" > composer.json
+	  fi
+	  if ! sudo cat composer.json | grep '"Bloonde\\UsersAndPrivileges\\Database\\Seeds\\\": "vendor/bloondeweb/usersandprivileges/database/seeds/"' >> /dev/null
+	  then
+	    PSR4=$(sed "$(($(cat composer.json | grep -n '"autoload": {' | cut -d ':' -f 1) + 2)) i             \"Bloonde\\\\\\\\UsersAndPrivileges\\\\\\\\Database\\\\\\\\Seeds\\\\\\\\\": \"vendor/bloondeweb/usersandprivileges/database/seeds/\"," composer.json)
+	    echo "$PSR4" > composer.json
+	  fi
+	  if ! sudo cat config/app.php | grep 'Bloonde\\UsersAndPrivileges\\UsersAndPrivilegesServiceProvider::class' >> /dev/null
+	  then
+	    APP=$(sed "$(($(cat config/app.php | grep -n "providers' => \[" | cut -d ':' -f 1) + 1)) i         Bloonde\\\\UsersAndPrivileges\\\\UsersAndPrivilegesServiceProvider::class," config/app.php)
+	    echo "$APP" > config/app.php
+	  fi
+	  if ! sudo cat config/app.php | grep 'Tymon\\\\JWTAuth\\\\Providers\\\\JWTAuthServiceProvider::class' >> /dev/null
+	  then
+	    APP=$(sed "$(($(cat config/app.php | grep -n "providers' => \[" | cut -d ':' -f 1) + 1)) i         Tymon\\\\JWTAuth\\\\Providers\\\\JWTAuthServiceProvider::class," config/app.php)
+	    echo "$APP" > config/app.php
+	  fi
+	  if ! sudo cat config/app.php | grep "Tymon\\\\JWTAuth\\\\Facades\\\\JWTAuth::class" >> /dev/null
+	  then
+	    ALIAS=$(sed "$(($(cat config/app.php | grep -n "'aliases' => \[" | cut -d ':' -f 1) + 1)) i         'JWTAuth' => Tymon\\\\JWTAuth\\\\Facades\\\\JWTAuth::class," config/app.php)
+	    echo "$ALIAS" > config/app.php
+	  fi
+	  if ! sudo cat config/app.php | grep "Tymon\\\\JWTAuth\\\\Facades\\\\JWTFactory::class" >> /dev/null
+	  then
+	    ALIAS=$(sed "$(($(cat config/app.php | grep -n "'aliases' => \[" | cut -d ':' -f 1) + 1)) i         'JWTFactory' => Tymon\\\\JWTAuth\\\\Facades\\\\JWTFactory::class," config/app.php)
+	    echo "$ALIAS" > config/app.php
+	  fi
+	  composer dumpautoload
+	  php artisan config:clear && php artisan cache:clear
+	  php artisan lvl:create_profile_helper
+	  php artisan lvl:create_custom_check_privilege
+	  if ! sudo cat app/Http/Kernel.php | grep "use App\\\\Http\\\\Middleware\\\\CustomCheckPrivilege;" >> /dev/null
+	  then
+	    USE=$(sed "$(($(cat app/Http/Kernel.php | grep -n "namespace App\\\\Http;" | cut -d ':' -f 1) + 2)) i use App\\\\Http\\\\Middleware\\\\CustomCheckPrivilege;" app/Http/Kernel.php)
+	    echo "$USE" > app/Http/Kernel.php
+	  fi
+	  if ! sudo cat app/Http/Kernel.php | grep "use Bloonde\\\\UsersAndPrivileges\\\\Http\\\\Middleware\\\\CheckProfile;" >> /dev/null
+	  then
+	    USE=$(sed "$(($(cat app/Http/Kernel.php | grep -n "namespace App\\\\Http;" | cut -d ':' -f 1) + 2)) i use Bloonde\\\\UsersAndPrivileges\\\\Http\\\\Middleware\\\\CheckProfile;" app/Http/Kernel.php)
+	    echo "$USE" > app/Http/Kernel.php
+	  fi
+	  if ! sudo cat app/Http/Kernel.php | grep "use Bloonde\\\\UsersAndPrivileges\\\\Middleware\\\\CheckAccountActivation;" >> /dev/null
+	  then
+	    USE=$(sed "$(($(cat app/Http/Kernel.php | grep -n "namespace App\\\\Http;" | cut -d ':' -f 1) + 2)) i use Bloonde\\\\UsersAndPrivileges\\\\Middleware\\\\CheckAccountActivation;" app/Http/Kernel.php)
+	    echo "$USE" > app/Http/Kernel.php
+	  fi
+	  if ! sudo cat app/Http/Kernel.php | grep "checkAccountActivation" >> /dev/null
+	  then
+	    KERNEL=$(sed "$(($(cat app/Http/Kernel.php | grep -n "protected \$routeMiddleware = \[" | cut -d ':' -f 1) + 1)) i 'checkAccountActivation'   => CheckAccountActivation::class," app/Http/Kernel.php)
+	    echo "$KERNEL" > app/Http/Kernel.php
+	  fi
+	  if ! sudo cat app/Http/Kernel.php | grep "checkPrivilege" >> /dev/null
+	  then
+	    KERNEL=$(sed "$(($(cat app/Http/Kernel.php | grep -n "protected \$routeMiddleware = \[" | cut -d ':' -f 1) + 1)) i 'checkPrivilege'   => CustomCheckPrivilege::class," app/Http/Kernel.php)
+	    echo "$KERNEL" > app/Http/Kernel.php
+	  fi
+	  if ! sudo cat app/Http/Kernel.php | grep "checkProfile" >> /dev/null
+	  then
+	    KERNEL=$(sed "$(($(cat app/Http/Kernel.php | grep -n "protected \$routeMiddleware = \[" | cut -d ':' -f 1) + 1)) i 'checkProfile'   => CheckProfile::class," app/Http/Kernel.php)
+	    echo "$KERNEL" > app/Http/Kernel.php
+	  fi
+	  if ! sudo cat routes/console.php | grep "init-database" >> /dev/null
+	  then
+	    echo "Artisan::command('init-database {withSeed}', function (\$withSeed = null){" >> routes/console.php
+	    echo "  \$this->call('migrate', ['--path' => '/vendor/bloondeweb/usersandprivileges/database/migrations']);" >> routes/console.php
+	    echo "  \$this->info('Migradas tablas del paquete de usuarios y privilegios');" >> routes/console.php
+	    echo "  \$this->call('migrate');" >> routes/console.php
+	    echo "  \$this->info('Migradas tablas del core');" >> routes/console.php
+	    echo "  if(\$withSeed) {" >> routes/console.php
+	    echo "      \$this->call('db:seed', ['--class' => 'Bloonde\UsersAndPrivileges\Database\Seeds\UserProfileTableSeeder']);" >> routes/console.php
+	    echo "      \$this->call('db:seed', ['--class' => 'DatabaseSeeder']);" >> routes/console.php
+	    echo "  }" >> routes/console.php
+	    echo "});" >> routes/console.php
+	  fi
+	  php artisan config:clear && php artisan cache:clear
+    else
+        echo -e "\e[31m Error --> $FILE no existe, ejecute php artisan lvl:create_resource_files {resource} {model} {migration} antes de seguir\e[39m"
+    fi
+    exit
 }
 
 case "$1" in
@@ -233,7 +342,13 @@ case "$1" in
 			docker)
 				downloadLaravelDocker
 			;;
-		esac		
+            abstract)
+              laravelAbstract
+            ;;
+            user)
+              userAndPrivilegies
+            ;;
+		esac
 	;;
   angular)
     downloadLaravelAngular
@@ -255,12 +370,6 @@ case "$1" in
 	;;
 	minimize)
 	  minimize
-	;;
-	abstract)
-	  laravelAbstract
-	;;
-	user)
-	  userAndPrivilegies
 	;;
 	ssh)
 		case "$2" in
@@ -298,16 +407,19 @@ case "$1" in
 	;;
   *)
     echo ""
-    echo " manga laravel project ------------ Descargar Laravel"
-    echo " manga laravel docker ------------- Descargar Laravel-Docker"
-    echo " manga angular -------------------- Descargar Docker-Angular"
-    echo " manga vue ------------------------ Descargar Docker-Vue"
-    echo " manga install -------------------- Instalar lo necesario"
-    echo " manga alias ---------------------- Añadir alias"
-    echo " manga host ----------------------- Añadir host"
-    echo " manga minimize ------------------- Minimizar hacienco click en dock"
-    echo " manga drive [install/start/stop] - Instalar/Montar/Desmontar GoogleDrive"
-    echo " manga menu ----------------------- Menú del Script"
+    echo " manga laravel project -------------------- Descargar Laravel"
+    echo " manga laravel docker --------------------- Descargar Laravel-Docker"
+    echo " manga laravel abstract ------------------- Configurar proyecto para usar paquete Laravel Abstract"
+    echo " manga laravel user ----------------------- Configurar proyecto para usar paquete User and Privilegies"
+    echo " manga angular ---------------------------- Descargar Docker-Angular"
+    echo " manga vue -------------------------------- Descargar Docker-Vue"
+    echo " manga install ---------------------------- Instalar docker, docker-compose y composer"
+    echo " manga alias ------------------------------ Añadir alias"
+    echo " manga host ------------------------------- Añadir host"
+    echo " manga minimize --------------------------- Minimizar hacienco click en dock"
+    echo " manga drive [install/start/stop/restart] - Instalar/Montar/Desmontar/Reiniciar GoogleDrive"
+    echo " manga ssh bloonde ------------------------ Iniciar conexión ssh con bloonde"
+    echo " manga menu ------------------------------- Menú del Script"
     echo ""
     read -p " Pulse [enter] para salir "
   ;;
