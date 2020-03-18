@@ -25,6 +25,7 @@ RUN chmod 777 /root/entrypoint.sh
 RUN echo 'alias "apache"="/etc/init.d/apache2"' >> /home/docker/.bashrc
 RUN echo 'alias "cu"="composer update"' >> /home/docker/.bashrc
 RUN echo 'alias "cda"="composer dumpautoload"' >> /home/docker/.bashrc
+RUN echo 'alias "manga"="~/./manga.sh"' >> /home/docker/.bashrc
 RUN echo 'alias "lclear"="php artisan config:clear && php artisan cache:clear && php artisan view:clear"' >> /home/docker/.bashrc
 ENTRYPOINT /root/entrypoint.sh
 
