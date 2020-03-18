@@ -27,6 +27,7 @@ services:
     volumes:
       - "../:/var/www/html/${PROJECT_NAME}"
       - "../docker-laravel/php/${TAG_IMAGE}/000-default.conf:/etc/apache2/sites-available/000-default.conf"
+      - "../docker-laravel/php/${TAG_IMAGE}/manga.sh:/home/docker/manga.sh"
       - "../docker-laravel/.env:/root/.env"
     ports:
       - "80:80"
