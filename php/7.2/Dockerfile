@@ -19,9 +19,11 @@ RUN service apache2 stop && a2enmod rewrite
 #add virtual host configuration of the site
 ADD 000-default.conf /etc/apache2/sites-available/000-default.conf
 
-RUN useradd -rm -d /home/docker -s /bin/bash -g root -G sudo -u 1000 docker
+RUN useradd -rm -d /home/docker -s /bin/bash -g root -G sudo -u 1000 -p "$(openssl passwd -1 docker)" docker
 COPY entrypoint.sh /root/entrypoint.sh
+COPY manga.sh /home/docker/manga.sh
 RUN chmod 777 /root/entrypoint.sh
+RUN chmod 777 /home/docker/manga.sh
 RUN echo 'alias "apache"="/etc/init.d/apache2"' >> /home/docker/.bashrc
 RUN echo 'alias "cu"="composer update"' >> /home/docker/.bashrc
 RUN echo 'alias "cda"="composer dumpautoload"' >> /home/docker/.bashrc
